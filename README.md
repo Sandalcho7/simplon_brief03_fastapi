@@ -45,7 +45,7 @@ Certaines requêtes SQL sont légèrement différentes des user stories fournies
 
 ### Procédure
 
-1 / Télécharger les données sur kaggle (voir partie Data) et placer le fichier .db dans un dossier ressources/ comme indiqué dans la structure du projet :
+1 / Télécharger les données sur kaggle (voir partie Data) et placer le fichier .db dans un dossier ressources/ comme indiqué dans la structure du projet.
 <br><br>
 2 / Depuis le terminal, lancer l'API en se plaçant à la racine du projet et en exécutant :
 ```bash
