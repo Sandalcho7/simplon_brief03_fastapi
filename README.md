@@ -1,4 +1,4 @@
-# SIMPLON DEV IA | Brief 3 (09/01/24)
+# SIMPLON DEV IA | Brief 3
 
 ## FastAPI - exposer les données de transactions immobilières via une API
 
@@ -56,7 +56,7 @@ python main.py
 
 Pour un hôte (localhost) et un port (8000), accédez à http://localhost:8000/docs sur votre navigateur, une fois le serveur lancé, pour accéder aux fonctionnalités de l'API.
 
-<br><hr>
+<hr>
 
 <br>User story 1 :
 
