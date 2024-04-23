@@ -4,18 +4,16 @@
 
 ### Contexte
 
-Rendu du brief en semaine 3 introduisant aux principes d'API et API REST en utilisant FastAPI. Après avoir réalisé le second brief ([voir ici](https://github.com/Sandalcho7/simplon_brief02)) nous demandant de rédiger les requêtes SQL pour répondre aux différentes user stories, nous sommes maintenant en charge de développer l'API REST exposant les résultats de ces requêtes en utilisant FastAPI.
+Rendu du brief en semaine 3 introduisant aux principes d'API et API REST en utilisant FastAPI. Après avoir réalisé le second brief ([voir ici](https://github.com/Sandalcho7/simplon_brief02_sql)) nous demandant de rédiger les requêtes SQL pour répondre aux différentes user stories, nous sommes maintenant en charge de développer l'API REST exposant les résultats de ces requêtes en utilisant FastAPI.
 
 ### Prérequis
 
-Avant de démarrer le développement le projet, il est nécessaire d'installer FastAPI, Uvicorn, SQLite et PyYAML sur l'environnement de travail. Pour effectuer ces installations, vous pouvez éxécuter la commande suivante :
+Avant de démarrer le développement le projet, il est nécessaire d'installer FastAPI, Uvicorn, et SQLite sur l'environnement de travail. Pour effectuer ces installations, vous pouvez éxécuter la commande suivante :
 ```bash
 pip install -r requirements.txt
 ```
 
 ### Data
-
-[Lien vers les user stories](https://docs.google.com/spreadsheets/d/110DFqhV0eNhR1mzBkRR5DD6Aey-lgXuTlf3VeSzWD58/edit#gid=0)
 
 [Lien vers les données à utiliser](https://www.kaggle.com/datasets/benoitfavier/immobilier-france/data)
 
@@ -29,7 +27,7 @@ pip install -r requirements.txt
 project/
 │
 ├── ressources/
-│   └── immo_fr.db    # Download the data on kaggle and place it there or change path in config.py
+│   └── immo_fr.db
 │
 ├── .gitignore
 ├── config.py    # Project config, contains database path setting
@@ -45,9 +43,13 @@ Certaines requêtes SQL sont légèrement différentes des user stories fournies
 
 ### Procédure
 
-1 / Télécharger les données sur kaggle (voir partie Data) et placer le fichier .db dans un dossier ressources/ comme indiqué dans la structure du projet.
-<br><br>
-2 / Depuis le terminal, lancer l'API en se plaçant à la racine du projet et en exécutant :
+1 / Télécharger les données sur kaggle (voir partie Data) <br>
+
+2 / Exporter les .csv utilisés (foyers_fiscaux et transactions_sample) en un seul fichier .db (j'ai utilisé [SQLite Online](https://sqliteonline.com/) pour cette opération) <br>
+
+3 / Placer le fichier .db obtenu dans le repo du projet (voir partie Structure) <br>
+
+4 / Depuis le terminal, lancer l'API en se plaçant à la racine du projet et en exécutant :
 ```bash
 python main.py
 ```

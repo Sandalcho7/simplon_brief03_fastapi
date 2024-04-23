@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Path
 
-from functions import con, validate_year, execute_sql
+from functions import validate_year, execute_sql
+from config import con
 
 
 
