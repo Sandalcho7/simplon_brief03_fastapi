@@ -1,179 +1,128 @@
-# SIMPLON DEV IA | Brief 3
+# Découverte de Fast API
 
-## FastAPI - exposer les données de transactions immobilières via une API
+## Contexte
+Dans le cadre de ma formation de développeur en IA, exercice pour prendre ses marques avec la mise en place d'une API. L'occasion aussi de travailler la structure d'un petit projet de développement.
 
-### Contexte
-
-Rendu du brief en semaine 3 introduisant aux principes d'API et API REST en utilisant FastAPI. Après avoir réalisé le second brief ([voir ici](https://github.com/Sandalcho7/simplon_brief02_sql)) nous demandant de rédiger les requêtes SQL pour répondre aux différentes user stories, nous sommes maintenant en charge de développer l'API REST exposant les résultats de ces requêtes en utilisant FastAPI.
-
-### Prérequis
-
+## Prérequis
 Avant de démarrer le développement le projet, il est nécessaire d'installer FastAPI, Uvicorn, et SQLite sur l'environnement de travail. Pour effectuer ces installations, vous pouvez éxécuter la commande suivante :
 ```bash
 pip install -r requirements.txt
 ```
 
-### Data
-
+## Data
 [Lien vers les données à utiliser](https://www.kaggle.com/datasets/benoitfavier/immobilier-france/data)
 
-[Premiers pas sur FastAPI](https://fastapi.tiangolo.com/fr/tutorial/first-steps/)
-
-[Paramètres de chemin sur FastAPI](https://fastapi.tiangolo.com/fr/tutorial/path-params/)
-
-### Structure du projet
-
+## Structure du projet
 ```bash
 project/
 │
-├── ressources/
-│   └── immo_fr.db
+├── data/
+│   └── immo_fr.db          # Fichier .db généré à partir des .csv sélectionnés
 │
+├── src/
+│   ├── api/
+│   │   ├── database.py     # Fonctions de connexion avec la base de données (fichier .db dans ce contexte)
+│   │   └── queries.py      # Requêtes SQL pour chaque cas
+│   │
+│   └── utils.py            # Fonctions utilitaires, vérifications
+│
+├── .env                    # Variables d'environnement à définir, fichier ignoré par Git
 ├── .gitignore
-├── config.py    # Project config, contains database path setting
-├── functions.py    # Externalized functions used in main.py
-├── main.py    # API script, endpoints for each user story
+├── main.py                 # Script de l'API, à exécuter pour démarrer le serveur
 ├── README.md
-└── requirements.txt    # Used to install all the project dependencies
+└── requirements.txt        # Dépendances à installer pour la bonne exécution du script
 ```
 
-### Notes
+## Notes
+Il s'agit d'un projet de test, le fichier .csv des transactions n'est qu'un échantillon de données. Ainsi, peu de requêtes renvoient un résultat.
 
-Certaines requêtes SQL sont légèrement différentes des user stories fournies, par l'ajout de paramètres, je les ai rendues plus génériques et donc utilisables dans de plus nombreux cas (différentes années, villes, etc.).
-
-### Procédure
-
+## Procédure
 1 / Télécharger les données sur kaggle (voir partie Data) <br>
 
 2 / Exporter les .csv utilisés (foyers_fiscaux et transactions_sample) en un seul fichier .db (j'ai utilisé [SQLite Online](https://sqliteonline.com/) pour cette opération) <br>
 
 3 / Placer le fichier .db obtenu dans le repo du projet (voir partie Structure) <br>
 
-4 / Depuis le terminal, lancer l'API en se plaçant à la racine du projet et en exécutant :
+4 / Créer le fichier .env à la racine du projet et définir le chemin vers le fichier .db
+```py
+DB_PATH="data/immo_fr.db"
+```
+
+5 / Depuis le terminal, lancer l'API en se plaçant à la racine du projet et en exécutant :
 ```bash
 python main.py
 ```
+L'API sera accessible à l'adresse http://localhost:8000.
 
-### Doc
+## Documentation de l'API
 
-Pour un hôte (localhost) et un port (8000), accédez à http://localhost:8000/docs sur votre navigateur, une fois le serveur lancé, pour accéder aux fonctionnalités de l'API.
+### 1. Revenu moyen d'une ville
+```
+GET /average_revenue/{city}
+```
+Retourne le revenu fiscal moyen le plus récent pour la ville spécifiée.
 
-<hr>
+### 2. Dernières transactions d'une ville
+```
+GET /last_transactions/{city}_last_{number}
+```
+Retourne les {number} dernières transactions pour la ville spécifiée.
 
-<br>User story 1 :
+### 3. Nombre de transactions par ville et année
+```
+GET /transactions_count/{city}_{year}
+```
+Retourne le nombre de transactions pour la ville et l'année spécifiées.
 
-    URL: /average_revenue/{city}
-    Method: GET
-    URL Params:
-        city [string] (required)
-    Success Response: JSON object with average revenue for the selected city.
-    Error Response:
-        400 Bad Request if null response
+### 4. Prix moyen au mètre carré par année et type de bien
+```
+GET /average_price_per_square_meter/{year}_{type}
+```
+Retourne le prix moyen au mètre carré pour l'année et le type de bien spécifiés.
 
-<br>User story 2 :
+### 5. Nombre de transactions par critères
+```
+GET /transactions_count2/{city}_{year}_{type}_{rooms}
+```
+Retourne le nombre de transactions pour la ville, l'année, le type de bien et le nombre de pièces spécifiés.
 
-    URL: /last_transactions/{city}_last_{number}
-    Method: GET
-    URL Params:
-        city [string] (required)
-        number [int] (required)
-    Success Response: JSON object with last transactions for the selected city. The 'number' parameter selects the number of displayed transactions.
-    Error Response:
-        400 Bad Request if null response
+### 6. Transactions par nombre de pièces
+```
+GET /transactions_by_pieces/{city}_{year}_{type}
+```
+Retourne le nombre de transactions par nombre de pièces pour la ville, l'année et le type de bien spécifiés.
 
-<br>User story 3 :
+### 7. Prix moyen au mètre carré par ville
+```
+GET /average_price_per_square_meter2/{city}_{year}_{type}
+```
+Retourne le prix moyen au mètre carré pour la ville, l'année et le type de bien spécifiés.
 
-    URL: /transactions_count/{city}_{year}
-    Method: GET
-    URL Params:
-        city [string] (required)
-        year [string] (required)
-    Success Response: JSON object with transactions count for the selected city and year.
-    Error Response:
-        400 Bad Request if null response
+### 8. Transactions par département
+```
+GET /transactions_by_dpt/
+```
+Retourne le nombre de transactions par département, triées par ordre décroissant.
 
-<br>User story 4 :
+### 9. Nombre de transactions par revenu et type de bien
+```
+GET /transactions_count3/{year1}_{revenu}_{year2}_{type}
+```
+Retourne le nombre de transactions pour les critères spécifiés : année du revenu fiscal, montant du revenu, année de transaction et type de bien.
 
-    URL: /average_price_per_square_meter/{year}_{type}
-    Method: GET
-    URL Params:
-        city [string] (required)
-        type [string] (required)
-    Success Response: JSON object with average price per square meter for the selected city and building type.
-    Error Response:
-        400 Bad Request if null response
+### 10. Top 10 des villes par nombre de transactions
+```
+GET /cities_top10_transactions/
+```
+Retourne les 10 villes ayant le plus grand nombre de transactions.
 
-<br>User story 5 :
+### 11 & 12. Top 10 des villes les moins chères par type de bien
+```
+GET /cities_top10_price/{type}
+```
+Retourne les 10 villes les moins chères (prix au mètre carré) pour le type de bien spécifié.
 
-    URL: /transactions_count2/{city}_{year}_{type}_{rooms}
-    Method: GET
-    URL Params:
-        city [string] (required)
-        year [string] (required)
-        type [string] (required)
-        rooms [int] (required)
-    Success Response: JSON object with transactions count for selected city, year, building type, and number of rooms.
-    Error Response:
-        400 Bad Request if null response
-
-<br>User story 6 :
-
-    URL: /transactions_by_pieces/{city}_{year}_{type}
-    Method: GET
-    URL Params:
-        city [string] (required)
-        year [string] (required)
-    Success Response: JSON object with transactions repartition for the selected city, year, and building type.
-    Error Response:
-        400 Bad Request if null response
-
-<br>User story 7 :
-
-    URL: /average_price_per_square_meter2/{city}_{year}_{type}
-    Method: GET
-    URL Params:
-        city [string] (required)
-        year [string] (required)
-        type [string] (required)
-    Success Response: JSON object with average price per square meter for the selected city, year, and building type.
-    Error Response:
-        400 Bad Request if null response
-
-<br>User story 8 :
-
-    URL: /transactions_by_dpt/
-    Method: GET
-    Success Response: JSON object with department ranking for transactions count.
-    Error Response:
-        400 Bad Request if null response
-
-<br>User story 9 :
-
-    URL: /transactions_count3/{year1}_{revenu}_{year2}_{type}
-    Method: GET
-    URL Params:
-        year1 [string] (required) - Year of the average taxable income
-        revenu [int] (required) - Minimal average taxable income
-        year2 [string] (required) - Year of the transactions count
-        type [string] (required) - Building type
-        Success Response: JSON object with transactions count for the selected year and building type, for the cities that had an average taxable income above the selected minimal income ('revenu') at a chosen year ('year2').
-    Error Response:
-        400 Bad Request if null response
-
-<br>User story 10 :
-
-    URL: /cities_top10_transactions/
-    Method: GET
-    Success Response: JSON object with the 10 cities that record the highest number of transactions.
-    Error Response:
-        400 Bad Request if null response
-
-<br>User stories 11 & 12 :
-
-    URL: /cities_top10_price/{type}
-    Method: GET
-    URL Params:
-        type [string] (required)
-    Success Response: JSON object with the 10 cities that have the lowest average price per square meter.
-    Error Response:
-        400 Bad Request if null response
+### Remarques
+- Les années doivent être au format YYYY.  
+- Les types de biens doivent être spécifiés en français (ex: "Maison", "Appartement").  
+- Les noms de villes sont insensibles à la casse.
